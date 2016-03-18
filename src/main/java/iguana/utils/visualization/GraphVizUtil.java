@@ -68,7 +68,6 @@ public class GraphVizUtil {
 	/**
 	 * Generates a graph from the given SPPF.
 	 * 
-	 * @param sppf
 	 * @param directory
 	 * @param name
 	 */
