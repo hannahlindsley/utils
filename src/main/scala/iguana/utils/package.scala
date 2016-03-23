@@ -9,10 +9,10 @@ package object utils {
 
   val EOF: Int = -1
 
-  implicit class EnhancedMap[A, B, T[B] <: TraversableLike[B, T[B]], This, M <: mutable.MapLike[A, T[B], This]](map: M) {
+  implicit class EnhancedMap[A, B, T[X] <: TraversableLike[X, T[X]], M[C,D] <: collection.MapLike[C, D, M[C,D]] with collection.Map[C,D]](map: M[A,T[B]]) {
 
-    def merge(other: M)(implicit cbf: CanBuildFrom[T[B], B, T[B]],
-                                 mCbf: CanBuildFrom[M, (A, T[B]), M]): M = {
+    def merge(other: M[A,T[B]])(implicit cbf: CanBuildFrom[T[B], B, T[B]],
+                                         mCbf: CanBuildFrom[M[A,T[B]], (A, T[B]), M[A,T[B]]]): M[A,T[B]] = {
 
       val m = mutable.Map.empty[A, Builder[B, T[B]]]
 
@@ -29,7 +29,7 @@ package object utils {
       builder.result()
     }
 
-    def reverse(implicit bf: CanBuildFrom[T[B], A, T[A]], mCbf: CanBuildFrom[M, (B, T[A]), M]): M = {
+    def reverse(implicit bf: CanBuildFrom[T[B], A, T[A]], mCbf: CanBuildFrom[M[A, T[B]], (B, T[A]), M[B, T[A]]]): M[B, T[A]] = {
 
       val m = mutable.Map.empty[B, Builder[A, T[A]]]
 
